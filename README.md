@@ -39,7 +39,7 @@ kubectl apply -f k8s/monitoring/prometheus-service.yaml
 
 1. View pods and services in the monitoring namespace:
 
-``bash
+```bash
 kubectl get pods -n monitoring
 kubectl get svc -n monitoring
 ```
