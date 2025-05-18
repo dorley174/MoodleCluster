@@ -9,6 +9,8 @@ This component provides the PostgreSQL backend for Moodle. It includes Kubernete
 - `persistent-volume.yaml`: Static Persistent Volume definition
 - `pvc.yaml`: Persistent Volume Claim to attach to the PostgreSQL pod
 
+  
+
 ## 🛠 Prerequisites
 
 - Kubernetes cluster (e.g., microk8s or Minikube)
@@ -54,3 +56,20 @@ And to connect to the database from inside the cluster:
   psql -h <postgres-service-name> -U <username> -d <database>
   ```
 Replace **<em>postgres-service-name</em>**, **<em>username</em>** and **<em>database</em>** with actual values from your manifest.
+
+
+## Useful notes
+
+✅ The deployment is already configured with:
+- a default database
+- username and password
+- log level and connection settings
+
+These can be **easily modified** inside `deployment.yaml` by editing the `env` section.
+
+📡 Once deployed, the PostgreSQL service is available to all pods in the **same Kubernetes namespace** via the DNS name:
+```
+postgresql-service
+```
+
+You can use this hostname to connect your applications (like Moodle) to the database within the cluster.
