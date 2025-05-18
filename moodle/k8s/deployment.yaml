@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moodle
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: moodle
+  template:
+    metadata:
+      labels:
+        app: moodle
+    spec:
+      initContainers:
+      - name: init-permissions
+        image: busybox
+        command: ["sh", "-c", "chmod 2775 /var/www/moodledata && chown -R www-data:www-data /var/www/moodledata"]
+        volumeMounts:
+        - name: moodle-storage
+          mountPath: /var/www/moodledata
+      containers:
+      - name: moodle
+        image: registry.c8x.dev/moodle:1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: moodle-storage
+          mountPath: /var/www/moodledata
+      volumes:
+      - name: moodle-storage
+        persistentVolumeClaim:
+          claimName: moodle-pvc
+      imagePullSecrets:
+      - name: regcred
